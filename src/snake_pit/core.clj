@@ -52,16 +52,19 @@
 (defn turn-right []
   "Make the snake turn right."
   (set! direction (change-direction direction RIGHT-TURN))
-  (set! snake (move snake direction apple)))
+  (set! snake (move snake direction apple))
+  (set! steps (inc steps)))
 
 (defn turn-left []
   "Make the snake turn left."
   (set! direction (change-direction direction LEFT-TURN))
-  (set! snake (move snake direction apple)))
+  (set! snake (move snake direction apple))
+  (set! steps (inc steps)))
 
 (defn move-forward []
   "Make to snake continue forward."
-  (set! snake (move snake direction apple)))
+  (set! snake (move snake direction apple))
+  (set! steps (inc steps)))
 
 
 (defn -main
