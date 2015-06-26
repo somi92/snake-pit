@@ -44,7 +44,7 @@
   "Change direction of the snake"
   (vec (reverse (map * old-dir turn))))
 
-(defn move [{:keys [body] :as snake} dir]
+(defn move [{:keys [body] :as snake} dir apple]
   "Move the snake in a given direction."
   (assoc snake :body (cons (add-points (first body) dir)
                            (if (eats? snake apple) body (butlast body)))))
@@ -52,16 +52,16 @@
 (defn turn-right []
   "Make the snake turn right."
   (set! direction (change-direction direction RIGHT-TURN))
-  (set! snake (move snake direction)))
+  (set! snake (move snake direction apple)))
 
 (defn turn-left []
   "Make the snake turn left."
   (set! direction (change-direction direction LEFT-TURN))
-  (set! snake (move snake direction)))
+  (set! snake (move snake direction apple)))
 
 (defn move-forward []
   "Make to snake continue forward."
-  (set! snake (move snake direction)))
+  (set! snake (move snake direction apple)))
 
 
 (defn -main

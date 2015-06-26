@@ -26,6 +26,89 @@
     (is (= DOWN (change-direction LEFT LEFT-TURN)))
     (is (= DOWN (change-direction RIGHT RIGHT-TURN)))))
 
-(deftest test-move
-  (testing "Testing the snake position change"
-    ))
+(deftest test-move-no-grow
+  (testing "Testing the snake position change without grow"
+
+    (let [right-snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5])}
+          right-snake-forward {:body '([9 5] [8 5] [7 5] [6 5] [5 5])}
+          right-snake-up {:body '([8 4] [8 5] [7 5] [6 5] [5 5])}
+          right-snake-down {:body '([8 6] [8 5] [7 5] [6 5] [5 5])}
+
+          left-snake {:body '([8 5] [9 5] [10 5] [11 5] [12 5])}
+          left-snake-forward {:body '([7 5] [8 5] [9 5] [10 5] [11 5])}
+          left-snake-up {:body '([8 4] [8 5] [9 5] [10 5] [11 5])}
+          left-snake-down {:body '([8 6] [8 5] [9 5] [10 5] [11 5])}
+
+          up-snake {:body '([8 5] [8 6] [8 7] [8 8] [8 9])}
+          up-snake-forward {:body '([8 4] [8 5] [8 6] [8 7] [8 8])}
+          up-snake-left {:body '([7 5] [8 5] [8 6] [8 7] [8 8])}
+          up-snake-right {:body '([9 5] [8 5] [8 6] [8 7] [8 8])}
+
+          down-snake {:body '([8 5] [8 4] [8 3] [8 2] [8 1])}
+          down-snake-forward {:body '([8 6] [8 5] [8 4] [8 3] [8 2])}
+          down-snake-left {:body '([9 5] [8 5] [8 4] [8 3] [8 2])}
+          down-snake-right {:body '([7 5] [8 5] [8 4] [8 3] [8 2])}
+
+          apple {:location [15 4]}]
+
+      (are [target-snake snake dir] (= target-snake (move snake dir apple))
+
+            right-snake-forward right-snake RIGHT
+            right-snake-up right-snake UP
+            right-snake-down right-snake DOWN
+
+            left-snake-forward left-snake LEFT
+            left-snake-up left-snake UP
+            left-snake-down left-snake DOWN
+
+            up-snake-forward up-snake UP
+            up-snake-left up-snake LEFT
+            up-snake-right up-snake RIGHT
+
+            down-snake-forward down-snake DOWN
+            down-snake-left down-snake RIGHT
+            down-snake-right down-snake LEFT))))
+
+(deftest test-move-grow
+  (testing "Testing the snake position change with grow"
+    (let [right-snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5])}
+          right-snake-forward {:body '([9 5] [8 5] [7 5] [6 5] [5 5] [4 5])}
+          right-snake-up {:body '([8 4] [8 5] [7 5] [6 5] [5 5] [4 5])}
+          right-snake-down {:body '([8 6] [8 5] [7 5] [6 5] [5 5] [4 5])}
+
+          left-snake {:body '([8 5] [9 5] [10 5] [11 5] [12 5])}
+          left-snake-forward {:body '([7 5] [8 5] [9 5] [10 5] [11 5] [12 5])}
+          left-snake-up {:body '([8 4] [8 5] [9 5] [10 5] [11 5] [12 5])}
+          left-snake-down {:body '([8 6] [8 5] [9 5] [10 5] [11 5] [12 5])}
+
+          up-snake {:body '([8 5] [8 6] [8 7] [8 8] [8 9])}
+          up-snake-forward {:body '([8 4] [8 5] [8 6] [8 7] [8 8] [8 9])}
+          up-snake-left {:body '([7 5] [8 5] [8 6] [8 7] [8 8] [8 9])}
+          up-snake-right {:body '([9 5] [8 5] [8 6] [8 7] [8 8] [8 9])}
+
+          down-snake {:body '([8 5] [8 4] [8 3] [8 2] [8 1])}
+          down-snake-forward {:body '([8 6] [8 5] [8 4] [8 3] [8 2] [8 1])}
+          down-snake-left {:body '([9 5] [8 5] [8 4] [8 3] [8 2] [8 1])}
+          down-snake-right {:body '([7 5] [8 5] [8 4] [8 3] [8 2] [8 1])}]
+
+      (are [target-snake snake dir] (= target-snake (move snake dir {:location (first (:body snake))}))
+
+            right-snake-forward right-snake RIGHT
+            right-snake-up right-snake UP
+            right-snake-down right-snake DOWN
+
+            left-snake-forward left-snake LEFT
+            left-snake-up left-snake UP
+            left-snake-down left-snake DOWN
+
+            up-snake-forward up-snake UP
+            up-snake-left up-snake LEFT
+            up-snake-right up-snake RIGHT
+
+            down-snake-forward down-snake DOWN
+            down-snake-left down-snake RIGHT
+            down-snake-right down-snake LEFT))))
+
+
+
+
