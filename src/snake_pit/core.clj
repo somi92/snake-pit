@@ -78,7 +78,7 @@
      (= dir RIGHT) (if (and (= y-head y-apple) (< x-head x-apple)) true false))))
 
 (defn danger-ahead? [{[head] :body :as snake} dir]
-  "Check if position in front of current snake's direction is occupied by a wall or snake segment."
+  "Check if position ahead of current snake's direction is occupied by a wall or snake segment."
   (let [next-pos (add-points head dir)]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
@@ -94,6 +94,13 @@
 (defn danger-left? [{[head] :body :as snake} dir]
   "Check if position to the left of current snake's direction is occupied by a wall or snake segment."
   (let [next-pos (add-points head (change-direction dir LEFT-TURN))]
+    (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
+      true
+      false)))
+
+(defn danger-two-ahead? [{[head] :body :as snake} dir]
+  "Check if position two steps ahead of current snake's direction is occupied by a wall or snake segment."
+  (let [next-pos (add-points (add-points head dir) dir)]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
       false)))

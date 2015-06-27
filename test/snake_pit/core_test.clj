@@ -238,6 +238,30 @@
            snake-bottom-corner UP false
            snake-bottom-corner DOWN true))))
 
+(deftest test-danger-two-ahead
+  (testing "Testing danger detection (danger two ahead)."
+    (let [snake-ovl {:body '([9 5] [11 5] [7 5] [9 3] [9 7])}
+          snake-ok {:body '([9 5] [12 5] [6 5] [9 2] [9 8])}
+          snake-top-corner {:body '([1 1])}
+          snake-bottom-corner {:body '([18 9])}]
+      (are [snake dir target] (= target (danger-two-ahead? snake dir))
+           snake-ovl LEFT true
+           snake-ovl RIGHT true
+           snake-ovl UP true
+           snake-ovl DOWN true
+           snake-ok LEFT false
+           snake-ok RIGHT false
+           snake-ok UP false
+           snake-ok DOWN false
+           snake-top-corner LEFT true
+           snake-top-corner RIGHT false
+           snake-top-corner UP true
+           snake-top-corner DOWN false
+           snake-bottom-corner LEFT false
+           snake-bottom-corner RIGHT true
+           snake-bottom-corner UP false
+           snake-bottom-corner DOWN true))))
+
 
 
 
