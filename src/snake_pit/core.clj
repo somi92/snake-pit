@@ -22,32 +22,46 @@
 (def ^:dynamic direction)
 (def ^:dynamic steps)
 
+;;; Util functions
+
 (defn add-points [& pts]
-  "Add vector points"
+  "Add vector points."
   (vec (apply map + pts)))
 
 (defn eats? [{[snake-head] :body} {apple :location}]
-  "Check if the snake eats an apple"
+  "Check if the snake eats an apple."
   (= snake-head apple))
 
 (defn create-apple []
-  "Create an apple"
+  "Create an apple."
   {:location [(rand-int WIDTH) (rand-int HEIGHT)]
    :type :apple})
 
 (defn create-snake []
-  "Create the snake"
+  "Create the snake."
   {:body (for [x (range 8 -1 -1)] [x 10])
    :type :snake})
 
 (defn change-direction [old-dir turn]
-  "Change direction of the snake"
+  "Change direction of the snake."
   (vec (reverse (map * old-dir turn))))
 
 (defn move [{:keys [body] :as snake} dir apple]
   "Move the snake in a given direction."
   (assoc snake :body (cons (add-points (first body) dir)
                            (if (eats? snake apple) body (butlast body)))))
+
+(defn food-ahead? [{[head] :body} dir {apple :location}]
+  "Check if an apple is in line with the snake's current direction."
+  (let [x-head (first head) y-head (last head)
+        x-apple (first apple) y-apple (last apple)]
+    (cond
+     (= dir UP) (if (and (= x-head x-apple) (> y-head y-apple)) true false)
+     (= dir DOWN) (if (and (= x-head x-apple) (< y-head y-apple)) true false)
+     (= dir LEFT) (if (and (= y-head y-apple) (> x-head x-apple)) true false)
+     (= dir RIGHT) (if (and (= y-head y-apple) (< x-head x-apple)) true false))))
+
+;;; Terminals
 
 (defn turn-right []
   "Make the snake turn right."
@@ -66,8 +80,13 @@
   (set! snake (move snake direction apple))
   (set! steps (inc steps)))
 
+;;; GP functions
+
 (defn if-food-ahead [food no-food]
-  )
+  "Check if an apple is in line with snake's current direction."
+  `(if (!!!)
+     ~food
+     ~no-food))
 
 (defn -main
   "I don't do a whole lot ... yet."

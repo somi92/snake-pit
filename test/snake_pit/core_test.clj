@@ -109,15 +109,34 @@
             down-snake-left down-snake RIGHT
             down-snake-right down-snake LEFT))))
 
-(deftest test-if-food-ahead
+(deftest test-food-ahead
   (testing "Testing food detection (food ahead)"
-    (with-redefs [snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5])}
-                  direction RIGHT
-                  apple {:location [15 5]}]
-      (let [branch-1 1
-            branch-2 2]
-        (is (= 1 (if-food-ahead branch-1 branch-2)))))))
+    (let [snake {:body '([9 5])}
+          apple-left {:location [2 5]}
+          apple-right {:location [17 5]}
+          apple-up {:location [9 1]}
+          apple-down {:location [9 9]}]
+      (are [dir apple target] (= target (food-ahead? snake dir apple))
+           LEFT apple-left true
+           RIGHT apple-right true
+           UP apple-up true
+           DOWN apple-down true
 
+           LEFT apple-up false
+           LEFT apple-down false
+           LEFT apple-right false
+
+           RIGHT apple-up false
+           RIGHT apple-down false
+           RIGHT apple-left false
+
+           UP apple-left false
+           UP apple-right false
+           UP apple-down false
+
+           DOWN apple-left false
+           DOWN apple-right false
+           DOWN apple-up false))))
 
 
 
