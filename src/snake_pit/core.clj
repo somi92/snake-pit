@@ -29,46 +29,55 @@
 ;;;
 ;;; Util functions
 ;;;
-(defn add-points [& pts]
+(defn add-points
   "Add vector points."
+  [& pts]
   (vec (apply map + pts)))
 
-(defn eats? [{[snake-head] :body} {apple :location}]
+(defn eats?
   "Check if the snake eats an apple."
+  [{[snake-head] :body} {apple :location}]
   (= snake-head apple))
 
-(defn out-of-bounds? [{[head] :body}]
-  "Check if the snake is out of bounds (wall hit)"
+(defn out-of-bounds?
+  "Check if the snake is out of bounds (wall hit)."
+  [{[head] :body}]
   (or (< (head 0) 0)
       (> (head 0) WIDTH)
       (< (head 1) 0)
       (> (head 1) HEIGHT)))
 
-(defn head-overlaps-body? [{[head & body] :body}]
-  "Check if the snake has collided with itself"
+(defn head-overlaps-body?
+  "Check if the snake has collided with itself."
+  [{[head & body] :body}]
   (contains? (set body) head))
 
-(defn create-apple []
+(defn create-apple
   "Create an apple."
+  []
   {:location [(rand-int WIDTH) (rand-int HEIGHT)]
    :type :apple})
 
-(defn create-snake []
+(defn create-snake
   "Create the snake."
+  []
   {:body (for [x (range 8 -1 -1)] [x 10])
    :type :snake})
 
-(defn change-direction [old-dir turn]
+(defn change-direction
   "Change direction of the snake."
+  [old-dir turn]
   (vec (reverse (map * old-dir turn))))
 
-(defn move [{:keys [body] :as snake} dir apple]
+(defn move
   "Move the snake in a given direction."
+  [{:keys [body] :as snake} dir apple]
   (assoc snake :body (cons (add-points (first body) dir)
                            (if (eats? snake apple) body (butlast body)))))
 
-(defn food-ahead? [{[head] :body} dir {apple :location}]
+(defn food-ahead?
   "Check if an apple is in line with the snake's current direction."
+  [{[head] :body} dir {apple :location}]
   (let [x-head (first head) y-head (last head)
         x-apple (first apple) y-apple (last apple)]
     (cond
@@ -77,29 +86,33 @@
      (= dir LEFT) (if (and (= y-head y-apple) (> x-head x-apple)) true false)
      (= dir RIGHT) (if (and (= y-head y-apple) (< x-head x-apple)) true false))))
 
-(defn danger-ahead? [{[head] :body :as snake} dir]
+(defn danger-ahead?
   "Check if position ahead of current snake's direction is occupied by a wall or snake segment."
+  [{[head] :body :as snake} dir]
   (let [next-pos (add-points head dir)]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
       false)))
 
-(defn danger-right? [{[head] :body :as snake} dir]
+(defn danger-right?
   "Check if position to the right of current snake's direction is occupied by a wall or snake segment."
+  [{[head] :body :as snake} dir]
   (let [next-pos (add-points head (change-direction dir RIGHT-TURN))]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
       false)))
 
-(defn danger-left? [{[head] :body :as snake} dir]
+(defn danger-left?
   "Check if position to the left of current snake's direction is occupied by a wall or snake segment."
+  [{[head] :body :as snake} dir]
   (let [next-pos (add-points head (change-direction dir LEFT-TURN))]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
       false)))
 
-(defn danger-two-ahead? [{[head] :body :as snake} dir]
+(defn danger-two-ahead?
   "Check if position two steps ahead of current snake's direction is occupied by a wall or snake segment."
+  [{[head] :body :as snake} dir]
   (let [next-pos (add-points (add-points head dir) dir)]
     (if (or (out-of-bounds? {:body (list next-pos)}) (head-overlaps-body? {:body (conj (:body snake) next-pos)}))
       true
@@ -108,20 +121,23 @@
 ;;;
 ;;; GP terminals
 ;;;
-(defn turn-right []
+(defn turn-right
   "Make the snake turn right."
+  []
   (set! direction (change-direction direction RIGHT-TURN))
   (set! snake (move snake direction apple))
   (set! steps (inc steps)))
 
-(defn turn-left []
+(defn turn-left
   "Make the snake turn left."
+  []
   (set! direction (change-direction direction LEFT-TURN))
   (set! snake (move snake direction apple))
   (set! steps (inc steps)))
 
-(defn move-forward []
+(defn move-forward
   "Make to snake continue forward."
+  []
   (set! snake (move snake direction apple))
   (set! steps (inc steps)))
 
@@ -130,26 +146,30 @@
 ;;;
 ;;; (initial function set)
 ;;;
-(defmacro if-food-ahead [food no-food]
+(defmacro if-food-ahead
   "GP food ahead macro."
+  [food no-food]
   `(if (food-ahead? snake direction apple)
      ~food
      ~no-food))
 
-(defmacro if-danger-ahead [danger no-danger]
+(defmacro if-danger-ahead
   "GP danger ahead macro."
+  [danger no-danger]
   `(if (danger-ahead? snake direction)
      ~danger
      ~no-danger))
 
-(defmacro if-danger-right [danger-right no-danger-right]
+(defmacro if-danger-right
   "GP danger right macro."
+  [danger-right no-danger-right]
   `(if (danger-right? snake direction)
      ~danger-right
      ~no-danger-right))
 
-(defmacro if-danger-left [danger-left no-danger-left]
+(defmacro if-danger-left
   "GP danger left macro."
+  [danger-left no-danger-left]
   `(if (danger-left? snake direction)
      ~danger-left
      ~no-danger-left))
@@ -161,6 +181,7 @@
 ;;;
 ;;; (full function set)
 ;;;
+(defmacro if-danger-two-ahead)
 
 (defn -main
   "I don't do a whole lot ... yet."
