@@ -262,6 +262,20 @@
            snake-bottom-corner UP false
            snake-bottom-corner DOWN true))))
 
+(deftest test-food-up
+  (testing "Testing food above snake."
+    (let [snake-1 {:body '([11 7] [10 7] [9 7] [9 6] [9 5] [9 4] [9 3] [9 2] [9 1])}
+          snake-2 {:body '([11 3] [10 3] [9 3] [9 4] [9 5] [9 6] [9 7] [9 8] [9 9])}
+          apple-1 {:location [12 2]}
+          apple-2 {:location [12 9]}
+          apple-3 {:location [11 7]}]
+      (are [snake apple target] (= target (food-up? snake apple))
+           snake-1 apple-1 true
+           snake-1 apple-2 false
+           snake-1 apple-3 false
+           snake-2 apple-1 true
+           snake-2 apple-2 false
+           snake-2 apple-3 false))))
 
 
 

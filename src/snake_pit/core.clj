@@ -118,6 +118,15 @@
       true
       false)))
 
+(defn food-up?
+  "Check if the current apple on the board is closer to the top of the board than the snake's head."
+  [{[head] :body} {apple :location}]
+  (let [head-height (head 1)
+        apple-height (apple 1)]
+    (if (> head-height apple-height)
+      true
+      false)))
+
 ;;;
 ;;; GP terminals
 ;;;
@@ -181,7 +190,19 @@
 ;;;
 ;;; (full function set)
 ;;;
-(defmacro if-danger-two-ahead)
+(defmacro if-danger-two-ahead
+  "GP danger two ahead macro."
+  [danger-two-ahead no-danger-two-ahead]
+  `(if (danger-two-ahead? snake direction)
+     ~danger-two-ahead
+     ~no-danger-two-ahead))
+
+(defmacro if-food-up
+  "GP food up macro."
+  [food-up no-food-up]
+  `(if (food-up?)
+     ~food-up
+     ~no-food-up))
 
 (defn -main
   "I don't do a whole lot ... yet."
