@@ -136,6 +136,34 @@
       true
       false)))
 
+(defn moving-right?
+  "Check if the snake's current direction is right."
+  [dir]
+  (if (= dir RIGHT)
+    true
+    false))
+
+(defn moving-left?
+  "Check if the snake's current direction is left."
+  [dir]
+  (if (= dir LEFT)
+    true
+    false))
+
+(defn moving-up?
+  "Check if the snake's current direction is up."
+  [dir]
+  (if (= dir UP)
+    true
+    false))
+
+(defn moving-down?
+  "Check if the snake's current direction is down."
+  [dir]
+  (if (= dir DOWN)
+    true
+    false))
+
 ;;;
 ;;; GP terminals
 ;;;
@@ -216,9 +244,37 @@
 (defmacro if-food-right
   "GP food right macro."
   [food-right no-food-right]
-  '(if (food-right? snake apple)
+  `(if (food-right? snake apple)
      ~food-right
      ~no-food-right))
+
+(defmacro if-moving-right
+  "GP moving right macro."
+  [moving-right no-moving-right]
+  `(if (moving-right? direction)
+     ~moving-right
+     ~no-moving-right))
+
+(defmacro if-moving-left
+  "GP moving left macro."
+  [moving-left no-moving-left]
+  `(if (moving-left? direction)
+     ~moving-left
+     ~no-moving-left))
+
+(defmacro if-moving-up
+  "GP moving up macro."
+  [moving-up no-moving-up]
+  `(if (moving-up? direction)
+     ~moving-up
+     ~no-moving-up))
+
+(defmacro if-moving-down
+  "GP moving down macro."
+  [moving-down no-moving-down]
+  `(if (moving-down? direction)
+     ~moving-down
+     ~no-moving-down))
 
 (defn -main
   "I don't do a whole lot ... yet."

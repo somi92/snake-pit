@@ -278,7 +278,7 @@
            snake-2 apple-3 false))))
 
 (deftest test-food-right
-  (testing "Testing food further right"
+  (testing "Testing food further right."
     (let [snake-1 {:body '([15 7] [14 7] [13 7] [13 6] [14 6] [15 6] [16 6] [17 6] [18 6])}
           snake-2 {:body '([5 5] [6 5] [7 5] [7 6] [6 6] [5 6] [4 6] [3 6] [2 6])}
           apple-1 {:location [18 2]}
@@ -291,6 +291,39 @@
            snake-2 apple-1 true
            snake-2 apple-2 false
            snake-2 apple-3 true))))
+
+(deftest test-moving-right
+  (testing "Testing snake right movement."
+    (are [dir target] (= target (moving-right? dir))
+         RIGHT true
+         LEFT false
+         UP false
+         DOWN false)))
+
+(deftest test-moving-left
+  (testing "Testing snake left movement."
+    (are [dir target] (= target (moving-left? dir))
+         RIGHT false
+         LEFT true
+         UP false
+         DOWN false)))
+
+(deftest test-moving-up
+  (testing "Testing snake up movement."
+    (are [dir target] (= target (moving-up? dir))
+         RIGHT false
+         LEFT false
+         UP true
+         DOWN false)))
+
+(deftest test-moving-down
+  (testing "Testing snake down movement."
+    (are [dir target] (= target (moving-down? dir))
+         RIGHT false
+         LEFT false
+         UP false
+         DOWN true)))
+
 
 
 
