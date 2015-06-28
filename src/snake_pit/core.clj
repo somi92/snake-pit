@@ -121,9 +121,18 @@
 (defn food-up?
   "Check if the current apple on the board is closer to the top of the board than the snake's head."
   [{[head] :body} {apple :location}]
-  (let [head-height (head 1)
-        apple-height (apple 1)]
-    (if (> head-height apple-height)
+  (let [head-y (head 1)
+        apple-y (apple 1)]
+    (if (> head-y apple-y)
+      true
+      false)))
+
+(defn food-right?
+  "Check if the current apple on the board is further to the right of the board than the snake's head."
+  [{[head] :body} {apple :location}]
+  (let [head-x (head 0)
+        apple-x (apple 0)]
+    (if (< head-x apple-x)
       true
       false)))
 
@@ -200,9 +209,16 @@
 (defmacro if-food-up
   "GP food up macro."
   [food-up no-food-up]
-  `(if (food-up?)
+  `(if (food-up? snake apple)
      ~food-up
      ~no-food-up))
+
+(defmacro if-food-right
+  "GP food right macro."
+  [food-right no-food-right]
+  '(if (food-right? snake apple)
+     ~food-right
+     ~no-food-right))
 
 (defn -main
   "I don't do a whole lot ... yet."

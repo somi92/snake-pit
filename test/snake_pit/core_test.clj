@@ -268,7 +268,7 @@
           snake-2 {:body '([11 3] [10 3] [9 3] [9 4] [9 5] [9 6] [9 7] [9 8] [9 9])}
           apple-1 {:location [12 2]}
           apple-2 {:location [12 9]}
-          apple-3 {:location [11 7]}]
+          apple-3 {:location [18 7]}]
       (are [snake apple target] (= target (food-up? snake apple))
            snake-1 apple-1 true
            snake-1 apple-2 false
@@ -276,6 +276,21 @@
            snake-2 apple-1 true
            snake-2 apple-2 false
            snake-2 apple-3 false))))
+
+(deftest test-food-right
+  (testing "Testing food further right"
+    (let [snake-1 {:body '([15 7] [14 7] [13 7] [13 6] [14 6] [15 6] [16 6] [17 6] [18 6])}
+          snake-2 {:body '([5 5] [6 5] [7 5] [7 6] [6 6] [5 6] [4 6] [3 6] [2 6])}
+          apple-1 {:location [18 2]}
+          apple-2 {:location [2 4]}
+          apple-3 {:location [15 1]}]
+      (are [snake apple target] (= target (food-right? snake apple))
+           snake-1 apple-1 true
+           snake-1 apple-2 false
+           snake-1 apple-3 false
+           snake-2 apple-1 true
+           snake-2 apple-2 false
+           snake-2 apple-3 true))))
 
 
 
