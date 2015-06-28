@@ -17,6 +17,7 @@
 (def DOWN "Down direction" [0 1])
 (def RIGHT-TURN "Right turn vector" [1 -1])
 (def LEFT-TURN "Left turn vector" [-1 1])
+(def CRITERIA "Acceptable minimum value." 100)
 
 ;;;
 ;;; State variables
@@ -51,6 +52,9 @@
   "Check if the snake has collided with itself."
   [{[head & body] :body}]
   (contains? (set body) head))
+
+(defn lose? [snake]
+  (or (head-overlaps-body? snake) (out-of-bounds? snake)))
 
 (defn create-apple
   "Create an apple."
@@ -285,7 +289,44 @@
                        [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
                        [if-moving-up 2] [if-moving-down 2]])
 
+(defn simulate-snake
+  "This function repeatedly runs the evolved individual and checks
+  the dynamic variables to see if the snake has run out of time or died."
+  [f]
+  (binding [snake (create-snake), apple (create-apple),
+            direction RIGHT, steps 0]
+           (loop []
+                 (f)
+                 (cond (or (> steps MAX_STEPS) (lose? snake)) (- MAX_APPLES (:score snake))
+                       :else (recur)))))
 
+(defn snake-error
+  "Calculate the error of the evolved program."
+  [tree]
+  (let [f (eval (list 'fn [] tree))]
+    (apply + (repeatedly TRIALS #(simulate-snake f)))))
+
+(defn snake-fitness
+  "Calculate the fitness, taking the criteria into account."
+  [tree]
+  (let [error (snake-error tree)]
+    (if (> error CRITERIA) error 0)))
+
+(defn snake-report
+  [tree fitness]
+  (pprint (nth tree 2))
+  (println (str "Error:\t" fitness "\n\n")))
+
+(defn test-snakes []
+  (println "Snake game")
+  (let [options {:iterations 10 :migrations 10 :num-islands 2
+                 :tournament-size 7 :population-size 500 :max-depth 8
+                 :terminals snake-terminals :fitness snake-fitness
+                 :functions snake-functions :report snake-report
+        }
+        [tree score] (rest (run-genetic-programming options))]
+    (do (println "Done!")
+        (robot-report tree score))))
 
 
 
