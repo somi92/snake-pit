@@ -62,6 +62,7 @@
   "Create the snake."
   []
   {:body (for [x (range 8 -1 -1)] [x 10])
+   :score 0
    :type :snake})
 
 (defn change-direction
@@ -71,9 +72,9 @@
 
 (defn move
   "Move the snake in a given direction."
-  [{:keys [body] :as snake} dir apple]
+  [{:keys [body score] :as snake} dir apple]
   (assoc snake :body (cons (add-points (first body) dir)
-                           (if (eats? snake apple) body (butlast body)))))
+                           (if (eats? snake apple) (do (assoc snake :score (inc score)) body) (butlast body)))))
 
 (defn food-ahead?
   "Check if an apple is in line with the snake's current direction."
@@ -276,10 +277,14 @@
      ~moving-down
      ~no-moving-down))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+;;;
+;;; GP setup
+;;;
+(def snake-terminals '[(turn-left) (turn-right) (move-forward)])
+(def snake-functions '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]
+                       [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
+                       [if-moving-up 2] [if-moving-down 2]])
+
 
 
 
