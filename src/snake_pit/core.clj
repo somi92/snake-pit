@@ -6,7 +6,7 @@
 ;;;
 ;;; Constants used in the game
 ;;;
-(def MAX_STEPS "Maximum number of steps that the snake takes" 300)
+(def MAX_STEPS "Maximum number of steps that the snake takes" 500)
 (def WIDTH "Width of the game board" 19)
 (def HEIGHT "Height of the game board" 10)
 (def MAX_APPLES "Maximum number of apples that the snake can eat" 211)
@@ -341,10 +341,10 @@
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 50 :migrations 10 :num-islands 4
-                 :tournament-size 20 :population-size 1000 :max-depth 5
+  (let [options {:iterations 25 :migrations 20 :num-islands 4
+                 :tournament-size 15 :population-size 3500 :max-depth 6
                  :terminals snake-terminals :fitness snake-fitness
-                 :functions snake-functions :report snake-report :mutation-probability 0.5
+                 :functions snake-functions :report snake-report :mutation-probability 0.3
         }
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
