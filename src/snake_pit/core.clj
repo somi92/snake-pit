@@ -26,6 +26,7 @@
 (def ^:dynamic apple)
 (def ^:dynamic direction)
 (def ^:dynamic steps)
+(def ^:dynamic score)
 
 ;;;
 ;;; Util functions
@@ -78,7 +79,7 @@
   "Move the snake in a given direction."
   [{:keys [body score] :as snake} dir apple]
   (assoc snake :body (cons (add-points (first body) dir)
-                           (if (eats? snake apple) (do (assoc snake :score (inc score)) body) (butlast body)))))
+                           (if (eats? snake apple) body (butlast body)))))
 
 (defn food-ahead?
   "Check if an apple is in line with the snake's current direction."
@@ -169,6 +170,13 @@
     true
     false))
 
+(defn distance-from-food
+  "Calculate the snake's distance from food."
+  [{[head] :body} {apple :location}]
+  (let [head-x (head 0) head-y (head 1)
+        apple-x (apple 0) apple-y (apple 1)]
+    (+ (Math/abs (- head-x apple-x)) (Math/abs (- head-y apple-y)))))
+
 ;;;
 ;;; GP terminals
 ;;;
@@ -177,20 +185,32 @@
   []
   (set! direction (change-direction direction RIGHT-TURN))
   (set! snake (move snake direction apple))
-  (set! steps (inc steps)))
+  (set! steps (inc steps))
+  (if (eats? snake apple)
+    (do
+      (set! apple (create-apple))
+      (set! score (inc score)))))
 
 (defn turn-left
   "Make the snake turn left."
   []
   (set! direction (change-direction direction LEFT-TURN))
   (set! snake (move snake direction apple))
-  (set! steps (inc steps)))
+  (set! steps (inc steps))
+  (if (eats? snake apple)
+    (do
+      (set! apple (create-apple))
+      (set! score (inc score)))))
 
 (defn move-forward
   "Make to snake continue forward."
   []
   (set! snake (move snake direction apple))
-  (set! steps (inc steps)))
+  (set! steps (inc steps))
+  (if (eats? snake apple)
+    (do
+      (set! apple (create-apple))
+      (set! score (inc score)))))
 
 ;;;
 ;;; GP functions
@@ -294,17 +314,19 @@
   the dynamic variables to see if the snake has run out of time or died."
   [f]
   (binding [snake (create-snake), apple (create-apple),
-            direction RIGHT, steps 0]
+            direction RIGHT, steps 0, score 0]
            (loop []
                  (f)
-                 (cond (or (> steps MAX_STEPS) (lose? snake)) (- MAX_APPLES (:score snake))
-                       :else (recur)))))
+                 (cond
+                  (or (> steps MAX_STEPS) (lose? snake))
+                  (if (= score 0) (+ MAX_APPLES (distance-from-food snake apple)) (- MAX_APPLES score))
+                  :else (recur)))))
 
 (defn snake-error
   "Calculate the error of the evolved program."
   [tree]
   (let [f (eval (list 'fn [] tree))]
-    (apply + (repeatedly TRIALS #(simulate-snake f)))))
+    (apply + (repeatedly 2 #(simulate-snake f)))))
 
 (defn snake-fitness
   "Calculate the fitness, taking the criteria into account."
@@ -319,14 +341,14 @@
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 10 :migrations 10 :num-islands 2
-                 :tournament-size 7 :population-size 500 :max-depth 8
+  (let [options {:iterations 50 :migrations 10 :num-islands 4
+                 :tournament-size 20 :population-size 1000 :max-depth 5
                  :terminals snake-terminals :fitness snake-fitness
-                 :functions snake-functions :report snake-report
+                 :functions snake-functions :report snake-report :mutation-probability 0.5
         }
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
-        (robot-report tree score))))
+        (snake-report tree score))))
 
 
 

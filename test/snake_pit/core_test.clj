@@ -324,6 +324,20 @@
          UP false
          DOWN true)))
 
+(deftest test-distance-from-food
+  (testing "Testing distance from food."
+    (let [snake {:body '([9 5])}
+          apple-0 {:location [8 5]}
+          apple-1 {:location [18 5]}
+          apple-2 {:location [9 1]}
+          apple-3 {:location [18 1]}
+          apple-4 {:location [1 9]}]
+      (are [snake apple target] (= target (distance-from-food snake apple))
+           snake apple-0 1
+           snake apple-1 9
+           snake apple-2 4
+           snake apple-3 13
+           snake apple-4 12))))
 
 
 
