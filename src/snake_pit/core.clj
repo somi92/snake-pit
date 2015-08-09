@@ -6,7 +6,7 @@
 ;;;
 ;;; Constants used in the game
 ;;;
-(def MAX_STEPS "Maximum number of steps that the snake takes" 500)
+(def MAX_STEPS "Maximum number of steps that the snake takes" 600)
 (def WIDTH "Width of the game board" 19)
 (def HEIGHT "Height of the game board" 10)
 (def MAX_APPLES "Maximum number of apples that the snake can eat" 211)
@@ -306,8 +306,10 @@
 ;;;
 (def snake-terminals '[(turn-left) (turn-right) (move-forward)])
 (def snake-functions '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]
-                       [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
+                      [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
                        [if-moving-up 2] [if-moving-down 2]])
+
+;(def snake-functions '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]])
 
 (defn simulate-snake
   "This function repeatedly runs the evolved individual and checks
@@ -341,8 +343,8 @@
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 25 :migrations 20 :num-islands 4
-                 :tournament-size 15 :population-size 3500 :max-depth 6
+  (let [options {:iterations 10 :migrations 10 :num-islands 4
+                 :tournament-size 10 :population-size 3000 :max-depth 6
                  :terminals snake-terminals :fitness snake-fitness
                  :functions snake-functions :report snake-report :mutation-probability 0.3
         }
