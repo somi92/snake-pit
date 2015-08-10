@@ -338,7 +338,7 @@
 (defn test-snakes []
   (println "Snake game")
   (let [options {:iterations 10 :migrations 10 :num-islands 4
-                 :tournament-size 8 :population-size 3000 :max-depth 5
+                 :tournament-size 10 :population-size 3000 :max-depth 7
                  :terminals snake-terminals :fitness snake-fitness
                  :functions snake-functions :report snake-report :mutation-probability 0.3
         }
