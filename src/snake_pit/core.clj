@@ -6,7 +6,7 @@
 ;;;
 ;;; Constants used in the game
 ;;;
-(def MAX_STEPS "Maximum number of steps that the snake takes" 600)
+(def MAX_STEPS "Maximum number of steps that the snake takes" 400)
 (def WIDTH "Width of the game board" 19)
 (def HEIGHT "Height of the game board" 10)
 (def MAX_APPLES "Maximum number of apples that the snake can eat" 211)
@@ -77,9 +77,14 @@
 
 (defn move
   "Move the snake in a given direction."
-  [{:keys [body score] :as snake} dir apple]
+  [{:keys [body] :as snake} dir apple-loc]
   (assoc snake :body (cons (add-points (first body) dir)
-                           (if (eats? snake apple) body (butlast body)))))
+                           (if (eats? snake apple-loc)
+                             (do
+                               (set! apple (create-apple))
+                               (set! score (inc score))
+                               body)
+                             (butlast body)))))
 
 (defn food-ahead?
   "Check if an apple is in line with the snake's current direction."
@@ -185,32 +190,20 @@
   []
   (set! direction (change-direction direction RIGHT-TURN))
   (set! snake (move snake direction apple))
-  (set! steps (inc steps))
-  (if (eats? snake apple)
-    (do
-      (set! apple (create-apple))
-      (set! score (inc score)))))
+  (set! steps (inc steps)))
 
 (defn turn-left
   "Make the snake turn left."
   []
   (set! direction (change-direction direction LEFT-TURN))
   (set! snake (move snake direction apple))
-  (set! steps (inc steps))
-  (if (eats? snake apple)
-    (do
-      (set! apple (create-apple))
-      (set! score (inc score)))))
+  (set! steps (inc steps)))
 
 (defn move-forward
   "Make to snake continue forward."
   []
   (set! snake (move snake direction apple))
-  (set! steps (inc steps))
-  (if (eats? snake apple)
-    (do
-      (set! apple (create-apple))
-      (set! score (inc score)))))
+  (set! steps (inc steps)))
 
 ;;;
 ;;; GP functions
@@ -328,7 +321,7 @@
   "Calculate the error of the evolved program."
   [tree]
   (let [f (eval (list 'fn [] tree))]
-    (apply + (repeatedly 2 #(simulate-snake f)))))
+    (apply + (repeatedly 1 #(simulate-snake f)))))
 
 (defn snake-fitness
   "Calculate the fitness, taking the criteria into account."
@@ -343,8 +336,8 @@
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 10 :migrations 10 :num-islands 4
-                 :tournament-size 10 :population-size 3000 :max-depth 6
+  (let [options {:iterations 5 :migrations 5 :num-islands 4
+                 :tournament-size 7 :population-size 1000 :max-depth 3
                  :terminals snake-terminals :fitness snake-fitness
                  :functions snake-functions :report snake-report :mutation-probability 0.3
         }
