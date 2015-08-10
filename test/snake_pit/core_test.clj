@@ -100,7 +100,8 @@
 (deftest test-move-grow
   (testing "Testing the snake position change with grow."
     (binding [apple (create-apple)
-              score 0]
+              score 0
+              steps 0]
      (let [right-snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
           right-snake-forward {:body '([9 5] [8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
           right-snake-up {:body '([8 4] [8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
