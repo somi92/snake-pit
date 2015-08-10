@@ -6,7 +6,7 @@
 ;;;
 ;;; Constants used in the game
 ;;;
-(def MAX_STEPS "Maximum number of steps that the snake takes" 400)
+(def MAX_STEPS "Maximum number of steps that the snake takes" 500)
 (def WIDTH "Width of the game board" 19)
 (def HEIGHT "Height of the game board" 10)
 (def MAX_APPLES "Maximum number of apples that the snake can eat" 211)
@@ -83,6 +83,7 @@
                              (do
                                (set! apple (create-apple))
                                (set! score (inc score))
+                               (set! steps 0)
                                body)
                              (butlast body)))))
 
@@ -321,7 +322,7 @@
   "Calculate the error of the evolved program."
   [tree]
   (let [f (eval (list 'fn [] tree))]
-    (apply + (repeatedly 1 #(simulate-snake f)))))
+    (apply + (repeatedly 4 #(simulate-snake f)))))
 
 (defn snake-fitness
   "Calculate the fitness, taking the criteria into account."
@@ -336,8 +337,8 @@
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 5 :migrations 5 :num-islands 4
-                 :tournament-size 7 :population-size 1000 :max-depth 3
+  (let [options {:iterations 10 :migrations 10 :num-islands 4
+                 :tournament-size 8 :population-size 3000 :max-depth 5
                  :terminals snake-terminals :fitness snake-fitness
                  :functions snake-functions :report snake-report :mutation-probability 0.3
         }

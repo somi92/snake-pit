@@ -99,7 +99,9 @@
 
 (deftest test-move-grow
   (testing "Testing the snake position change with grow."
-    (let [right-snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
+    (binding [apple (create-apple)
+              score 0]
+     (let [right-snake {:body '([8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
           right-snake-forward {:body '([9 5] [8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
           right-snake-up {:body '([8 4] [8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
           right-snake-down {:body '([8 6] [8 5] [7 5] [6 5] [5 5] [4 5]) :score 0}
@@ -135,7 +137,7 @@
 
             down-snake-forward down-snake DOWN
             down-snake-left down-snake RIGHT
-            down-snake-right down-snake LEFT))))
+            down-snake-right down-snake LEFT)))))
 
 (deftest test-food-ahead
   (testing "Testing food detection (food ahead)."
