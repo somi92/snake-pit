@@ -1,24 +1,26 @@
 (ns snake-pit.gui.main
-  (:use seesaw.core))
+  (:use seesaw.core)
+  (:use snake-pit.gui.breed))
 
-(def gap-h [:fill-h 5])
-(def gap-v [:fill-v 2])
+(def gap-ho [:fill-h 5])
+(def gap-ve [:fill-v 2])
 
 (def main-frame-content
   (border-panel
    :north (vertical-panel
-           :items [gap-v (horizontal-panel :items
-                                           [gap-h (label "Application of genetic programming to a snake game.") gap-h])])
-   :center (vertical-panel :items [gap-v (horizontal-panel :items [gap-h
+           :items [gap-ve (horizontal-panel :items
+                                           [gap-ho (label "Application of genetic programming to a snake game.") gap-ho])])
+   :center (vertical-panel :items [gap-ve (horizontal-panel :items [gap-ho
                                      (button :text "Manual play")
-                                     gap-h
-                                     (button :text "Breed snakes")
-                                     gap-h
+                                     gap-ho
+                                     (button :text "Breed snakes"
+                                             :listen [:action (fn [e] (-> breed-frame show!))])
+                                     gap-ho
                                      (button :text " Run snake ")
-                                     gap-h
+                                     gap-ho
                                      (button :text "   About   ")
-                                     gap-h])])
-   :south (horizontal-panel :items [gap-h (label :icon (clojure.java.io/resource "../resources/snake.png")) gap-h])))
+                                     gap-ho])])
+   :south (horizontal-panel :items [gap-ho (label :icon (clojure.java.io/resource "../resources/snake.png")) gap-ho])))
 
 (def main-frame
   (frame :title "Snake pit"

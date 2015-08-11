@@ -1,5 +1,6 @@
 (ns snake-pit.gui.breed
-  (:use seesaw.core))
+  (:use seesaw.core)
+  (:use snake-pit.core))
 
 (def gap-h [:fill-h 20])
 (def gap-v [:fill-v 5])
@@ -49,21 +50,36 @@
                                                        (text :id :depth
                                                              :text "5"
                                                              :halign :center
+                                                             :size param-text-size) gap-h])
+                             gap-v
+                             (horizontal-panel :items [gap-h (label :text "Mutation rate: "
+                                                                    :size label-size) gap-h
+                                                       (text :id :mutation
+                                                             :text "0.3"
+                                                             :halign :center
                                                              :size param-text-size) gap-h])])))
+
+(defn run-gp
+  []
+  ())
+
 
 (def result-panel (border-panel
                    :center (vertical-panel
                             :items [(vertical-panel :items [(horizontal-panel :items [gap-h (label :text "Results: "
                                                                                                    :size label-size) gap-h
-                                                                                            (button :text "Run GP"
-                                                                                                    :size param-text-size)])
+                                                                                            (button :text "Run GP") gap-h
+                                                                                            (button :text "Stop GP")])
                                                             gap-v
                                                             (scrollable (text :id :result-area
                                                                               :multi-line? true
                                                                               :editable? false)
                                                                               :size [380 :by 300])
                                                             gap-v
-                                                            (button :text "Save results to a file")])
+                                                            (horizontal-panel :items [(label :text "GP is running...        "
+                                                                                             :visible? false)
+                                                                                   (button :text "Save results to a file"
+                                                                                           :visible? false)])])
                                                             gap-v])))
 
 (def panel (vertical-panel :items [params-panel result-panel]))
@@ -71,7 +87,7 @@
 (def breed-frame (frame
                   :title "Breed snakes"
                   :content panel
-                  :height 600
+                  :height 620
                   :width 420
                   :resizable? false))
 

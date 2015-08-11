@@ -17,7 +17,7 @@
 (def DOWN "Down direction" [0 1])
 (def RIGHT-TURN "Right turn vector" [1 -1])
 (def LEFT-TURN "Left turn vector" [-1 1])
-(def CRITERIA "Acceptable minimum value." 208)
+(def CRITERIA "Acceptable minimum value." 100)
 
 ;;;
 ;;; State variables
@@ -322,7 +322,7 @@
   "Calculate the error of the evolved program."
   [tree]
   (let [f (eval (list 'fn [] tree))]
-    (apply + (repeatedly 1 #(simulate-snake f)))))
+    (apply + (repeatedly TRIALS #(simulate-snake f)))))
 
 (defn snake-fitness
   "Calculate the fitness, taking the criteria into account."
@@ -332,15 +332,16 @@
 
 (defn snake-report
   [tree fitness]
-  (pprint tree)
+  (pprint (nth tree 2))
   (println (str "Error:\t" fitness "\n\n")))
 
-(defn test-snakes []
+(defn run-snakes-gp [gp-options]
   (println "Snake game")
-  (let [options {:iterations 1 :migrations 1 :num-islands 4
-                 :tournament-size 5 :population-size 500 :max-depth 3
+  (let [options {:iterations (:iterations gp-options) :migrations (:migrations gp-options)
+                 :num-islands (:num-islands gp-options) :tournament-size (:tournament-size gp-options)
+                 :population-size (:population-size gp-options) :max-depth (:max-depth gp-options)
                  :terminals snake-terminals :fitness snake-fitness
-                 :functions snake-functions :report snake-report :mutation-probability 0.3
+                 :functions snake-functions :report snake-report :mutation-probability (:mutation-probability gp-options)
         }
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
