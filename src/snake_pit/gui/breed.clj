@@ -62,7 +62,9 @@
                                                                               :multi-line? true
                                                                               :editable? false)
                                                                               :size [380 :by 300])
-                                                            (button :text "Save results to a file")])])))
+                                                            gap-v
+                                                            (button :text "Save results to a file")])
+                                                            gap-v])))
 
 (def panel (vertical-panel :items [params-panel result-panel]))
 
@@ -70,8 +72,8 @@
                   :title "Breed snakes"
                   :content panel
                   :height 600
-                  :width 400
-                  :resizable? true))
+                  :width 420
+                  :resizable? false))
 
 (-> breed-frame show!)
 
