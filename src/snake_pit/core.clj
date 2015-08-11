@@ -6,7 +6,7 @@
 ;;;
 ;;; Constants used in the game
 ;;;
-(def MAX_STEPS "Maximum number of steps that the snake takes" 500)
+(def MAX_STEPS "Maximum number of steps that the snake takes" 300)
 (def WIDTH "Width of the game board" 19)
 (def HEIGHT "Height of the game board" 10)
 (def MAX_APPLES "Maximum number of apples that the snake can eat" 211)
@@ -17,7 +17,7 @@
 (def DOWN "Down direction" [0 1])
 (def RIGHT-TURN "Right turn vector" [1 -1])
 (def LEFT-TURN "Left turn vector" [-1 1])
-(def CRITERIA "Acceptable minimum value." 100)
+(def CRITERIA "Acceptable minimum value." 208)
 
 ;;;
 ;;; State variables
@@ -322,7 +322,7 @@
   "Calculate the error of the evolved program."
   [tree]
   (let [f (eval (list 'fn [] tree))]
-    (apply + (repeatedly 4 #(simulate-snake f)))))
+    (apply + (repeatedly 1 #(simulate-snake f)))))
 
 (defn snake-fitness
   "Calculate the fitness, taking the criteria into account."
@@ -332,13 +332,13 @@
 
 (defn snake-report
   [tree fitness]
-  (pprint (nth tree 2))
+  (pprint tree)
   (println (str "Error:\t" fitness "\n\n")))
 
 (defn test-snakes []
   (println "Snake game")
-  (let [options {:iterations 10 :migrations 10 :num-islands 4
-                 :tournament-size 10 :population-size 3000 :max-depth 7
+  (let [options {:iterations 1 :migrations 1 :num-islands 4
+                 :tournament-size 5 :population-size 500 :max-depth 3
                  :terminals snake-terminals :fitness snake-fitness
                  :functions snake-functions :report snake-report :mutation-probability 0.3
         }
