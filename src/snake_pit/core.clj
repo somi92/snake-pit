@@ -17,7 +17,7 @@
 (def DOWN "Down direction" [0 1])
 (def RIGHT-TURN "Right turn vector" [1 -1])
 (def LEFT-TURN "Left turn vector" [-1 1])
-(def CRITERIA "Acceptable minimum value." 100)
+(def CRITERIA "Acceptable minimum value." 843)
 
 ;;;
 ;;; State variables
