@@ -300,6 +300,13 @@
      ~no-moving-down))
 
 ;;;
+;;; Util
+;;;
+(defn remove-from-string
+  [string replacement regex]
+  (.replaceAll string regex replacement))
+
+;;;
 ;;; GP setup
 ;;;
 (def snake-terminals '[(snake-pit.core/turn-left) (snake-pit.core/turn-right) (snake-pit.core/move-forward)])
@@ -338,7 +345,8 @@
   [tree fitness]
   (pprint (nth tree 2))
   (println (str "Error:\t" fitness "\n\n"))
-  (.report @interop (str (with-out-str (pprint (nth tree 2))) "\n" "Error:\t" fitness "\n\n")))
+  (.onResult @interop (str (remove-from-string (with-out-str (pprint (nth tree 2))) "" "snake-pit.core/")
+                         "\nError:\t" fitness)))
 
 (defn run_snakes_pit
   [gp-options]
