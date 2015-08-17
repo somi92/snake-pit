@@ -299,11 +299,11 @@
 ;;; GP setup
 ;;;
 (def snake-terminals '[(turn-left) (turn-right) (move-forward)])
-(def snake-functions '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]
-                      [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
-                       [if-moving-up 2] [if-moving-down 2]])
+(def snake-functions-full '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]
+                            [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
+                            [if-moving-up 2] [if-moving-down 2]])
 
-;(def snake-functions '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]])
+(def snake-functions-init '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]])
 
 (defn simulate-snake
   "This function repeatedly runs the evolved individual and checks
@@ -341,7 +341,10 @@
                  :num-islands (:num_islands gp-options) :tournament-size (:tournament_size gp-options)
                  :population-size (:population_size gp-options) :max-depth (:max_depth gp-options)
                  :terminals snake-terminals :fitness snake-fitness
-                 :functions snake-functions :report snake-report :mutation-probability (:mutation_probability gp-options)
+                 :functions (if (= (:functions gp-options) "init")
+                              snake-functions-init
+                              snake-functions-full)
+                 :report snake-report :mutation-probability (:mutation_probability gp-options)
         }
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
