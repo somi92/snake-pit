@@ -1,4 +1,6 @@
 (ns snake-pit.core
+  (:gen-class
+   :methods [#^{:static true} [run_snakes_pit [Object] Void]])
   (:use fungp.core)
   (:use fungp.util)
   (:use clojure.pprint))
@@ -335,7 +337,8 @@
   (pprint (nth tree 2))
   (println (str "Error:\t" fitness "\n\n")))
 
-(defn run-snakes-gp [gp-options]
+(defn start_snakes_pit
+  [gp-options]
   (println "Snake game")
   (let [options {:iterations (:iterations gp-options) :migrations (:migrations gp-options)
                  :num-islands (:num_islands gp-options) :tournament-size (:tournament_size gp-options)
@@ -344,13 +347,14 @@
                  :functions (if (= (:functions gp-options) "init")
                               snake-functions-init
                               snake-functions-full)
-                 :report snake-report :mutation-probability (:mutation_probability gp-options)
-        }
+                 :report snake-report :mutation-probability (:mutation_probability gp-options)}
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
         (snake-report tree score))))
 
-
+(defn -start_snakes_pit
+  [gp-options]
+  (start_snakes_pit gp-options))
 
 
 
