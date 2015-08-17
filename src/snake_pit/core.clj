@@ -17,7 +17,7 @@
 (def DOWN "Down direction" [0 1])
 (def RIGHT-TURN "Right turn vector" [1 -1])
 (def LEFT-TURN "Left turn vector" [-1 1])
-(def CRITERIA "Acceptable minimum value." 843)
+(def CRITERIA "Acceptable minimum value." 50)
 
 ;;;
 ;;; State variables
@@ -338,10 +338,10 @@
 (defn run-snakes-gp [gp-options]
   (println "Snake game")
   (let [options {:iterations (:iterations gp-options) :migrations (:migrations gp-options)
-                 :num-islands (:num-islands gp-options) :tournament-size (:tournament-size gp-options)
-                 :population-size (:population-size gp-options) :max-depth (:max-depth gp-options)
+                 :num-islands (:num_islands gp-options) :tournament-size (:tournament_size gp-options)
+                 :population-size (:population_size gp-options) :max-depth (:max_depth gp-options)
                  :terminals snake-terminals :fitness snake-fitness
-                 :functions snake-functions :report snake-report :mutation-probability (:mutation-probability gp-options)
+                 :functions snake-functions :report snake-report :mutation-probability (:mutation_probability gp-options)
         }
         [tree score] (rest (run-genetic-programming options))]
     (do (println "Done!")
