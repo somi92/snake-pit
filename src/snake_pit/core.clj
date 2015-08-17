@@ -30,6 +30,8 @@
 (def ^:dynamic steps)
 (def ^:dynamic score)
 
+(def interop (ref {}))
+
 ;;;
 ;;; Util functions
 ;;;
@@ -300,12 +302,12 @@
 ;;;
 ;;; GP setup
 ;;;
-(def snake-terminals '[(turn-left) (turn-right) (move-forward)])
-(def snake-functions-full '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]
-                            [if-danger-two-ahead 2] [if-food-up 2] [if-food-right 2] [if-moving-right 2] [if-moving-left 2]
-                            [if-moving-up 2] [if-moving-down 2]])
+(def snake-terminals '[(snake-pit.core/turn-left) (snake-pit.core/turn-right) (snake-pit.core/move-forward)])
+(def snake-functions-full '[[snake-pit.core/if-food-ahead 2] [snake-pit.core/if-danger-ahead 2] [snake-pit.core/if-danger-right 2] [snake-pit.core/if-danger-left 2] [do 2]
+                            [snake-pit.core/if-danger-two-ahead 2] [snake-pit.core/if-food-up 2] [snake-pit.core/if-food-right 2] [snake-pit.core/if-moving-right 2] [snake-pit.core/if-moving-left 2]
+                            [snake-pit.core/if-moving-up 2] [snake-pit.core/if-moving-down 2]])
 
-(def snake-functions-init '[[if-food-ahead 2] [if-danger-ahead 2] [if-danger-right 2] [if-danger-left 2] [do 2]])
+(def snake-functions-init '[[snake-pit.core/if-food-ahead 2] [snake-pit.core/if-danger-ahead 2] [snake-pit.core/if-danger-right 2] [snake-pit.core/if-danger-left 2] [do 2]])
 
 (defn simulate-snake
   "This function repeatedly runs the evolved individual and checks
@@ -335,9 +337,10 @@
 (defn snake-report
   [tree fitness]
   (pprint (nth tree 2))
-  (println (str "Error:\t" fitness "\n\n")))
+  (println (str "Error:\t" fitness "\n\n"))
+  (.report @interop (str (with-out-str (pprint (nth tree 2))) "\n" "Error:\t" fitness "\n\n")))
 
-(defn start_snakes_pit
+(defn run_snakes_pit
   [gp-options]
   (println "Snake game")
   (let [options {:iterations (:iterations gp-options) :migrations (:migrations gp-options)
@@ -352,9 +355,11 @@
     (do (println "Done!")
         (snake-report tree score))))
 
-(defn -start_snakes_pit
+(defn -run_snakes_pit
   [gp-options]
-  (start_snakes_pit gp-options))
+  (dosync
+   (ref-set interop gp-options))
+  (run_snakes_pit (bean gp-options)))
 
 
 
