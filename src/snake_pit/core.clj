@@ -343,10 +343,13 @@
 
 (defn snake-report
   [tree fitness]
-  (pprint (nth tree 2))
+  (println (remove-from-string (with-out-str (pprint (nth tree 2))) "" "snake-pit.core/"))
   (println (str "Error:\t" fitness "\n\n"))
-  (.onResult @interop (str (remove-from-string (with-out-str (pprint (nth tree 2))) "" "snake-pit.core/")
-                         "\nError:\t" fitness)))
+  (try
+    (.onResult @interop (str (remove-from-string (with-out-str (pprint (nth tree 2))) "" "snake-pit.core/")
+                         "\nError:\t" fitness))
+    (catch Exception e
+      (println "onResult not available"))))
 
 (defn run_snakes_pit
   [gp-options]
