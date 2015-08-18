@@ -14,7 +14,7 @@ This software is intended to be used as a library and all you need to do is to i
 
 ## Description
 
-In this implementation the game board size is 20 squares wide and 11 squares high.The snake is coloured green with 9 body squares and starts at position (1,11)-(9,11) moving to the right. Food pieces (apples) are coloured red and pop up at random positions. By eating apples, snake grows one body square at a time. The maximum number of apples to eat is 211, at which point the snake fill the whole game board. In order to survive the snake needs to avoid hitting the wall or its own body.
+In this implementation the game board size is 20 squares wide and 11 squares high.The snake has 9 body squares and starts at position (1,11)-(9,11) moving to the right. Food pieces (apples) pop up at random positions. By eating apples, snake grows one body square at a time. The maximum number of apples to eat is 211, at which point the snake fill the whole game board. In order to survive the snake needs to avoid hitting the wall or its own body.
 
 The snakes has sensor functions that enable it to sense its environment. Each sensor function has two arguments and executes its first argument if the condition is true, else it executes its second argument. The exception is Clojure's `do` function, which executes both arguments.
 
