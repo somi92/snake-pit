@@ -167,7 +167,9 @@ Also, for full convenience there is the [snake-pit-ui](https://github.com/somi92
 
 If you have some comments, suggestions or noticed some bugs and problems feel free to contact me and contribute.
 
-Milos Stojanovic email: stojanovicmilos31@gmail.com
+Developed by Milos Stojanovic 
+
+email: stojanovicmilos31@gmail.com
 
 ## License
 
