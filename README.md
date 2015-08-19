@@ -8,10 +8,6 @@ The project uses [fungp - a genetic programming library for Clojure] (https://gi
 
 The project is inspired by this article: [Application of Genetic Programming to the Snake Game](http://www.gamedev.net/page/resources/_/technical/artificial-intelligence/application-of-genetic-programming-to-the-snake-r1175).
 
-## Installation
-
-This software is intended to be used as a library and all you need to do is to include the jar file into the classpath of your project. The jar file can be found in the releases section of this respository.
-
 ## Description
 
 In this implementation the game board size is 20 squares wide and 11 squares high.The snake has 9 body squares and starts at position (1,11)-(9,11) moving to the right. Food pieces (apples) pop up at random positions. By eating apples, snake grows one body square at a time. The maximum number of apples to eat is 211, at which point the snake fill the whole game board. In order to survive the snake needs to avoid hitting the wall or its own body.
@@ -37,16 +33,21 @@ The snakes has sensor functions that enable it to sense its environment. Each se
 In order to move, the snakes uses three terminal functions for each direction `turn-right`, `turn-left`, `move-forward`.
 
 When the GP starts, a population of random programs is created. A program which represents the snake's control routine is a tree structure consisting of nested sensor function calls down to the terminals. For example this is one small randomly created program:
-
-`(if-food-ahead
+```
+(if-food-ahead
  (move-forward)
  (if-food-right
   (move-forward)
-  (turn-left)))`
+  (turn-left)))
+```
 
-Then, the GP executes each program and calculates its fitness. The fitness is calculated as `maximum number of apples (211) - score (number of apples eaten)`, so the lower the number the better performace of a program. To eliminate the possibility of a program getting a better fitness due to lucky apple placement in a run, each program is executed four times so the fitness is `(211*4)-(sum of scores in all four runs)`. Each program has to be able to collect the apple in maximum 300 square moves or it is killed. If the program hasn't reached any apples it is penalized according to the distance from the apple. This prevents programs to get stuck in a loop pattern which is ineffective in apple collecting. The best programs are then selected in tournament selection and crossed with each other (they exchange parts of their tree structure) in order to produce new generation of hopefully better programs. Some programs are selected to be randomly mutated. This process repeats until the GP is stopped manualy or it runs the defined number of generations (iterations*migrations) or some program reaches the fitness below 50. 
+Then, the GP runs each program and calculates its fitness. One run consists of GP executing a program (control routine) before each snake move until the death of the snake. The fitness is calculated as `maximum number of apples (211) - score (number of apples eaten)`, so the lower the number the better performace of a program. To eliminate the possibility of a program getting a better fitness due to lucky apple placement in a run, each program has four runs so the fitness is `(211*4)-(sum of scores in all four runs)`. Each program has to be able to collect the apple in maximum 300 square moves or it is killed. This prevents programs to get stuck in a loop pattern which is ineffective in apple collecting. If the program hasn't reached any apples it is penalized according to the distance from the apple. The best programs are then selected in tournament selection and crossed with each other (they exchange parts of their tree structure) in order to produce new generation of hopefully better programs. Some programs are selected to be randomly mutated. This process repeats until the GP is stopped manualy or it runs the defined number of generations (iterations*migrations) or some program reaches the fitness below 50. 
 
 To find out more about GP functions, terminals, tournament selection, mutation and other GP stuff, read the first chapter of the book referenced above and refer to the above article.  
+
+## Installation
+
+This software is intended to be used as a library and all you need to do is to include the jar file into the classpath of your project. The jar file can be found in the releases section of this respository.
 
 ## Usage
 
