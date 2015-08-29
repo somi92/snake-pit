@@ -2,7 +2,7 @@
 
 snake-pit is a student project written in Clojure to demonstrate application of genetic programming to the snake game. Genetic programming is a evolutionary computation technique inspired by nature which enables a population of computer programs to evolve in order to solve some problems. In this case, the individual program is a tree structure that represents a control routine handling the snake's movement on the game board. The goal is to evolve a program from initial random population that enables the snake to eat as many pieces of food and survive as long as possible.
 
-![Genetic programming algorithm](http://geneticprogramming.us/images/revisedtree.jpg?raw=true "Genetic programming flowchart") 
+![Genetic programming algorithm](https://github.com/somi92/snake-pit/blob/master/resources/flowchart.jpg?raw=true "Genetic programming flowchart") 
 
 Image 1 - Genetic programming flowchart (source http://geneticprogramming.us/What_is_Genetic_Programming.html)
 
